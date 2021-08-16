@@ -16,7 +16,6 @@ func createFormReader(params Params) io.Reader {
 	return strings.NewReader(form.Encode())
 }
 
-
 // 构建Url拼接参数
 func urlAppendParam(param map[string]interface{}) string {
 	if param == nil {

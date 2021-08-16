@@ -24,7 +24,6 @@ type Session struct {
 	notHeader bool
 }
 
-
 func (session *Session) defaultClient() {
 	session.client = http.DefaultClient
 }
@@ -53,9 +52,6 @@ func ProxySession(proxy string) *Session {
 	session.client = &c
 	return &session
 }
-
-
-
 
 func (session *Session) ClientProxy(proxy string) {
 	if proxy == "" || !strings.HasPrefix(proxy, "http") {
@@ -89,7 +85,6 @@ func (session *Session) AddHeader(maps map[string]string) {
 	session.Header = header
 }
 
-
 func (session *Session) SetCookie(cookie string) {
 	hdr := http.Header{}
 	if session.Header != nil {
@@ -99,7 +94,6 @@ func (session *Session) SetCookie(cookie string) {
 	session.Header = hdr
 }
 
-
 func (session *Session) Get(path string, params Params) HttpBack {
 	return session.Api(path, http.MethodGet, params)
 }
@@ -107,7 +101,6 @@ func (session *Session) Get(path string, params Params) HttpBack {
 func (session *Session) Post(path string, params Params) HttpBack {
 	return session.Api(path, http.MethodPost, params)
 }
-
 
 func (session *Session) PostForUrl(path string, params Params) HttpBack {
 	session.notHeader = true
@@ -223,7 +216,7 @@ func (session *Session) sendPostRequest(uri string, params Params) HttpBack {
 	return SuccessSessionBack(session)
 }
 
-func (session *Session) sendRequest(request *http.Request) ( *http.Response, []byte, HttpBack) {
+func (session *Session) sendRequest(request *http.Request) (*http.Response, []byte, HttpBack) {
 
 	var err error
 	var response *http.Response
@@ -237,7 +230,7 @@ func (session *Session) sendRequest(request *http.Request) ( *http.Response, []b
 	}
 
 	if err != nil {
-		if strings.Contains(err.Error(), "proxyconnect"){
+		if strings.Contains(err.Error(), "proxyconnect") {
 			return nil, nil, ErrorMsgBack(PROXY_URL_ERROR, err.Error())
 		}
 		err = fmt.Errorf("网络异常,发送请求失败: %v", err)
@@ -262,4 +255,3 @@ func (session *Session) sendRequest(request *http.Request) ( *http.Response, []b
 	//log.Printf("[返回]: code:%s , %s\n", response.Status, string(data))
 	return response, data, SuccessBack()
 }
-
