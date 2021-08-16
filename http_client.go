@@ -2,10 +2,10 @@ package http_client
 
 import (
 	"bytes"
+	"douba_crawler/logger"
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -26,6 +26,10 @@ type Session struct {
 
 func (session *Session) defaultClient() {
 	session.client = http.DefaultClient
+}
+
+func (session *Session) SetClient(client *http.Client) {
+	session.client = client
 }
 
 func DefaultSession() *Session {
@@ -118,7 +122,9 @@ func (session *Session) PostForJson(path string, params Params) HttpBack {
 }
 
 func (session *Session) Api(path string, method Method, params Params) HttpBack {
-	return session.graph(path, method, params)
+	graph := session.graph(path, method, params)
+	logger.Debug(fmt.Sprintf("[返回]:%+v \n", graph))
+	return graph
 }
 
 func (session *Session) graph(path string, method Method, params Params) HttpBack {
@@ -139,8 +145,8 @@ func (session *Session) graph(path string, method Method, params Params) HttpBac
 }
 
 func (session *Session) sendGetRequest(uri string) HttpBack {
-	//log.Printf("请求的接口为 %s\n", uri)
-	//log.Printf("请求头为 %v\n", session.Header)
+	logger.Debug(fmt.Sprintf("请求的接口为 %s\n", uri))
+	//logger.Debug("请求头为 %v\n", session.Header)
 	parsedURL, err := url.Parse(uri)
 	if err != nil {
 		return ErrorBack(URL_ERROR)
@@ -166,7 +172,7 @@ func (session *Session) sendGetRequest(uri string) HttpBack {
 func (session *Session) sendPostRequest(uri string, params Params) HttpBack {
 
 	var rc io.Reader
-	//log.Printf("请求的接口为 %s\n", uri)
+	logger.Debug(fmt.Sprintf("请求的接口为 %s\n", uri))
 	if session.Header == nil {
 		session.Header = http.Header{}
 	}
@@ -209,7 +215,6 @@ func (session *Session) sendPostRequest(uri string, params Params) HttpBack {
 
 	//cookie, _ := json.Marshal(response.Cookies())
 	//log.Println("返回cookie:", string(cookie))
-	log.Println("====================")
 	if response.StatusCode != 200 {
 		return ErrorMsgBack(NETWORK_RESP_STATUS_ERRPR, fmt.Sprintf("原始状态码：%d", response.StatusCode))
 	}
