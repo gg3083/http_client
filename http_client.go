@@ -146,7 +146,7 @@ func (session *Session) graph(path string, method Method, params Params) HttpBac
 
 func (session *Session) sendGetRequest(uri string) HttpBack {
 	logger.Debug(fmt.Sprintf("请求的接口为 %s\n", uri))
-	//logger.Debug("请求头为 %v\n", session.Header)
+	logger.Debug(fmt.Sprintf("请求头为 %v\n", session.Header))
 	parsedURL, err := url.Parse(uri)
 	if err != nil {
 		return ErrorBack(URL_ERROR)
@@ -200,9 +200,9 @@ func (session *Session) sendPostRequest(uri string, params Params) HttpBack {
 	}
 	request.Header = session.Header
 
-	//marshal, _ := json.Marshal(session.Header)
-	//log.Printf("请求类型为 %v\n", contentType)
-	//log.Printf("请求头为 %v\n", string(marshal))
+	marshal, _ := json.Marshal(session.Header)
+	logger.Debug(fmt.Sprintf("请求类型为 %v\n", contentType))
+	logger.Debug(fmt.Sprintf("请求头为 %v\n", string(marshal)))
 
 	response, data, httpBack := session.sendRequest(request)
 
