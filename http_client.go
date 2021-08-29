@@ -2,10 +2,10 @@ package http_client
 
 import (
 	"bytes"
-	"douba_crawler/logger"
 	"encoding/json"
 	"fmt"
 	"io"
+	"maibang_crawler/logger"
 	"net/http"
 	"net/url"
 	"strings"
