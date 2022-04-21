@@ -52,3 +52,12 @@ func ErrorMsgBack(code int, msg string) HttpBack {
 		OriginalMsg: msg,
 	}
 }
+
+func ErrorMsgSessionBack(code int, msg string, session *Session) HttpBack {
+	return HttpBack{
+		Code:        code,
+		BizMsg:      GetMsg(code),
+		OriginalMsg: msg,
+		Session:     session,
+	}
+}

@@ -216,7 +216,7 @@ func (session *Session) sendPostRequest(uri string, params Params) HttpBack {
 	//cookie, _ := json.Marshal(response.Cookies())
 	//log.Println("返回cookie:", string(cookie))
 	if response.StatusCode != 200 {
-		return ErrorMsgBack(NETWORK_RESP_STATUS_ERRPR, fmt.Sprintf("原始状态码：%d", response.StatusCode))
+		return ErrorMsgSessionBack(NETWORK_RESP_STATUS_ERRPR, fmt.Sprintf("原始状态码：%d", response.StatusCode), session)
 	}
 	return SuccessSessionBack(session)
 }
