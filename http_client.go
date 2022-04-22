@@ -163,6 +163,7 @@ func (session *Session) sendGetRequest(uri string) HttpBack {
 	response, data, httpBack := session.sendRequest(req)
 
 	if httpBack.Code != SUCCESS {
+		httpBack.Session = session
 		return httpBack
 	}
 	session.RespData = data
